@@ -1,0 +1,22 @@
+flutter_app: 
+  command: jnovel_unofficial
+  arch: x64
+  parent: /usr/local/lib
+  nonInteractive: true
+  
+
+control:
+  Package: jnovel-unofficial
+  Version: 1.0.0
+  Architecture: amd64
+  Priority: optional
+  Depends:
+  Maintainer: pheromkuka49@gmail.com
+  Description: this app is unofficial jnovel app. scroll through thousands of light-novels  and manga
+
+desktop:
+  path: debian/jnovel-unofficial.desktop
+  icon: debian/jnovel-unofficial.png
+
+#options:
+#  exec_out_dir: debian/packages
