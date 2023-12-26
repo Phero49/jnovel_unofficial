@@ -121,7 +121,7 @@ class _NovelListWidgetState extends State<NovelListWidget> {
                                         ? 6
                                         : constraints.maxWidth > 600
                                             ? 4
-                                            : 2,
+                                            : 3,
                                     mainAxisSpacing: 5,
                                     crossAxisSpacing: 5),
                             itemCount: length,

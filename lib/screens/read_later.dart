@@ -61,90 +61,87 @@ class _ReadLaterState extends State<ReadLaterScreen> {
             return LayoutBuilder(
               builder: (context, constraints) {
                 return GridView.builder(
-                  padding: const EdgeInsets.all(15),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: constraints.maxWidth > 900
-                          ? 4
-                          : constraints.maxWidth > 600
-                              ? 4
-                              : 3,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 5),
-                  itemCount: data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    ReadLater book = data[index];
+                    padding: const EdgeInsets.all(15),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: constraints.maxWidth > 900
+                            ? 4
+                            : constraints.maxWidth > 600
+                                ? 4
+                                : 3,
+                        mainAxisSpacing: 20,
+                        mainAxisExtent: 400,
+                        crossAxisSpacing: 15),
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      ReadLater book = data[index];
 
-                    Uint8List bytes =
-                        Uint8List.fromList(GZipCodec().decode(book.cover!));
-
-                    return MouseRegion(
-                        cursor: MaterialStateMouseCursor.clickable,
-                        child: GestureDetector(
-                            onTap: () async {
-                              await launchUrlString(book.url!);
-                            },
-                            child: Card(
-                                child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                      Uint8List bytes =
+                          Uint8List.fromList(GZipCodec().decode(book.cover!));
+                      return MouseRegion(
+                          cursor: MaterialStateMouseCursor.clickable,
+                          child: GestureDetector(
+                              onTap: () async {
+                                await launchUrlString(book.url!);
+                              },
                               child: Column(
                                 children: [
-                                  Expanded(
-                                      child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                          child: Image.memory(bytes))),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    child: Image.memory(
+                                      bytes,
+                                      fit: BoxFit.fill,
+                                      height: 200,
+                                    ),
+                                  ),
                                   const SizedBox(height: 20),
                                   Center(
-                                      child: SelectableText(
-                                    "${book.title}",
-                                    maxLines: 2,
-                                    style: const TextStyle(
+                                    child: SelectableText(
+                                      "${book.title}",
+                                      maxLines: 2,
+                                      style: const TextStyle(
                                         overflow: TextOverflow.ellipsis,
-                                        fontSize: 16),
-                                  )),
-                                  SizedBox(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
                                     height: 15,
                                   ),
                                   Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "Added on: ",
-                                        style: TextStyle(
-                                            color: Colors.grey.shade300),
-                                      )),
-                                  SizedBox(
-                                    height: 8,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "Added on: ${DateTime.parse(book.addedOn!).toLocal()}",
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                    ),
                                   ),
-                                  Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          "${DateTime.parse(book.addedOn!).toLocal()}"
-                                              .split(' ')[0])),
                                   const SizedBox(
                                     height: 8,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: ElevatedButton.icon(
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor: Color.fromARGB(
-                                                255, 223, 115, 66)),
-                                        onPressed: () async {
-                                          bool done =
-                                              await removed(book.title!);
-                                          if (true) {
-                                            setState(() {});
-                                          }
-                                        },
-                                        icon: Icon(Icons.delete),
-                                        label: const Text(
-                                            "Remove from read later")),
-                                  )
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            Color.fromARGB(255, 223, 115, 66),
+                                      ),
+                                      onPressed: () async {
+                                        bool done = await removed(book.title!);
+                                        if (true) {
+                                          setState(() {});
+                                        }
+                                      },
+                                      icon: Icon(Icons.delete),
+                                      label:
+                                          const Text("Remove from read later"),
+                                    ),
+                                  ),
                                 ],
-                              ),
-                            ))));
-                  },
-                );
+                              )));
+                    });
               },
             );
           }

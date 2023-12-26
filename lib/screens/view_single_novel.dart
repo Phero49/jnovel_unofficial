@@ -106,8 +106,10 @@ class _ViewSingleNovelState extends State<ViewSingleNovel> {
                 ..title = widget.name
                 ..url = widget.url
                 ..addedOn = DateTime.now().toString();
-              readLater.put(ob);
+              await readLater.put(ob);
             });
+
+            Navigator.pushNamed(context, '/read_later');
           },
           label: const Text("read later"),
           icon: const Icon(Icons.bookmark_add),
@@ -179,6 +181,8 @@ class _ViewSingleNovelState extends State<ViewSingleNovel> {
       }
     }
   }
+
+  //TODO:fix when a user click on another vol so it doesnt load
 
   Future<SingleNovel> getNovel() async {
     if (widget.source == 'home') {
@@ -376,11 +380,11 @@ class _ViewSingleNovelState extends State<ViewSingleNovel> {
                                                   height: 10,
                                                 ),
                                                 novelTitle(),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 description(snapshot.data!),
-                                                SizedBox(
+                                                const SizedBox(
                                                   height: 10,
                                                 ),
                                                 const SizedBox(
@@ -416,29 +420,47 @@ class _ViewSingleNovelState extends State<ViewSingleNovel> {
                                                 children: [
                                                   for (SingleNovel novel
                                                       in otherVolumes)
-                                                    Card(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child:
-                                                                Image.network(
-                                                              novel.image!,
-                                                              width: constraint
-                                                                          .maxWidth >
-                                                                      800
-                                                                  ? 200
-                                                                  : 100,
-                                                            ),
-                                                          )
-                                                        ],
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ViewSingleNovel(
+                                                                      novel
+                                                                          .downloadLink!,
+                                                                      novel
+                                                                          .image!,
+                                                                      novel
+                                                                          .name!,
+                                                                      source:
+                                                                          'volume'),
+                                                            ));
+                                                      },
+                                                      child: Card(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child:
+                                                                  Image.network(
+                                                                novel.image!,
+                                                                width: constraint
+                                                                            .maxWidth >
+                                                                        800
+                                                                    ? 200
+                                                                    : 100,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
+                                                    )
                                                 ],
                                               );
                                             }
@@ -455,7 +477,7 @@ class _ViewSingleNovelState extends State<ViewSingleNovel> {
                     ConnectionState.waiting) {
                   return Scaffold(
                       body: Container(
-                    child: const CircularProgressIndicator(),
+                    child: const Center(child: CircularProgressIndicator()),
                   ));
                 } else {
                   return Scaffold(

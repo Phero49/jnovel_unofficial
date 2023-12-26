@@ -15,6 +15,7 @@ class _HomeTabWidgetState extends State<HomeTabWidget> {
   int currentPage = 1;
   Future<List<Result>> getArticles(String url, int page) async {
     Parser? parser = await Chaleno().load(url);
+
     List<Result>? articles = parser!.querySelectorAll("article");
 
     articleNumber = articles.length;
@@ -24,7 +25,9 @@ class _HomeTabWidgetState extends State<HomeTabWidget> {
       outOf = int.parse(totalPages);
     }
     if (page == 1) {
-      articles.removeRange(0, 3);
+      if (articles.isNotEmpty) {
+        articles.removeRange(0, 3);
+      }
     }
     return articles;
   }
@@ -73,8 +76,8 @@ class _HomeTabWidgetState extends State<HomeTabWidget> {
       future: firstSix(),
       builder: (BuildContext context, AsyncSnapshot<List<Novel>> snapshot) {
         if (snapshot.hasError) {
-          return const Center(
-            child: Text("error"),
+          return Center(
+            child: Text("error ${snapshot.error}"),
           );
         } else if (snapshot.hasData && loaded == true) {
           List<Novel> novels = snapshot.data as List<Novel>;
@@ -84,7 +87,7 @@ class _HomeTabWidgetState extends State<HomeTabWidget> {
               Container(
                 margin: EdgeInsets.only(bottom: 20),
                 child: ElevatedButton.icon(
-                  label: Text(
+                  label: const Text(
                     'Pages',
                     style: TextStyle(color: Colors.white),
                   ),
