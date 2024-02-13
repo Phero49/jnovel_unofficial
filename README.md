@@ -1,6 +1,7 @@
 # jnovel_unofficial
 
-A new Flutter project.
+jnovel_unofficial  is a crossplatform app for destop and android  it allows you to scroll through lightnovels and mangas  on jnovel 
+this project uses web scrapping to scrap important elements on jnovel and display the novels on desktop and mobile
 
 ## Getting Started
 
